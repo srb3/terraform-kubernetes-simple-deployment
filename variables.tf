@@ -31,6 +31,12 @@ variable "service_annotations" {
   default     = {}
 }
 
+variable "extra_labels" {
+  description = "Any extra labels you want to add to the deployment"
+  type        = map(string)
+  default     = {}
+}
+
 variable "env" {
   description = "The items in this map will be set as the environment variables in the container"
   type        = map(string)

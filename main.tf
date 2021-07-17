@@ -1,3 +1,8 @@
+# Labels
+locals {
+  labels = merge(var.extra_labels, { app = var.service_name })
+}
+
 # Create any config maps
 resource "kubernetes_config_map" "this-config-map" {
   for_each = { for c in var.config_map_volumes : c.name => { name = c.name, data = c.data } }
@@ -26,9 +31,7 @@ resource "kubernetes_service" "this-service" {
         target_port = port.value.container_port
       }
     }
-    selector = {
-      app = kubernetes_deployment.this-deployment.metadata.0.labels.app
-    }
+    selector = local.labels
   }
 }
 
@@ -44,15 +47,11 @@ resource "kubernetes_deployment" "this-deployment" {
   spec {
     replicas = var.replicas
     selector {
-      match_labels = {
-        app = var.service_name
-      }
+      match_labels = local.labels
     }
     template {
       metadata {
-        labels = {
-          app = var.service_name
-        }
+        labels = local.labels
       }
       spec {
         dynamic "volume" {

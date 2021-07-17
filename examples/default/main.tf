@@ -32,6 +32,10 @@ locals {
     cpu    = "100m"
     memory = "128Mi"
   }
+  postgres_labels = {
+    "test1" = "alpha"
+    "test2" = "beta"
+  }
 }
 
 module "deployment_example" {
@@ -43,5 +47,6 @@ module "deployment_example" {
   ports             = local.postgres_ports
   resource_limits   = local.postgres_limits
   resource_requests = local.postgres_requests
+  extra_labels      = local.postgres_labels
   replicas          = 1
 }
