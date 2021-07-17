@@ -32,7 +32,7 @@ resource "kubernetes_service" "this-service" {
   }
 }
 
-# Creating the deployment
+# Creating the kubernetes deployment
 resource "kubernetes_deployment" "this-deployment" {
   metadata {
     name      = var.service_name
