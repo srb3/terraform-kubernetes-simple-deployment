@@ -1,6 +1,6 @@
 # Labels
 locals {
-  labels = merge(var.extra_labels, { app = var.service_name })
+  labels = merge(var.extra_labels, { app = var.name })
 }
 
 # Create any config maps
@@ -15,8 +15,9 @@ resource "kubernetes_config_map" "this-config-map" {
 
 # Create a kubernetes service to expose the deployment
 resource "kubernetes_service" "this-service" {
+  count = var.create_service ? 1 : 0
   metadata {
-    name        = var.service_name
+    name        = var.name
     namespace   = var.namespace
     annotations = var.service_annotations
   }
@@ -38,10 +39,10 @@ resource "kubernetes_service" "this-service" {
 # Creating the kubernetes deployment
 resource "kubernetes_deployment" "this-deployment" {
   metadata {
-    name      = var.service_name
+    name      = var.name
     namespace = var.namespace
     labels = {
-      app = var.service_name
+      app = var.name
     }
   }
   spec {
@@ -80,7 +81,7 @@ resource "kubernetes_deployment" "this-deployment" {
             limits   = var.resource_limits
           }
           image = var.image
-          name  = var.service_name
+          name  = var.name
 
           dynamic "env" {
             for_each = var.env
@@ -143,21 +144,21 @@ resource "kubernetes_deployment" "this-deployment" {
 # The locals are used as helpers for this modules outputs
 locals {
   load_balancer_ip = (
-    length(kubernetes_service.this-service.status.0.load_balancer.0.ingress) > 0
+    length(try(kubernetes_service.this-service.0.status.0.load_balancer.0.ingress, [])) > 0
     ?
-    kubernetes_service.this-service.status.0.load_balancer.0.ingress.0.hostname != ""
+    kubernetes_service.this-service.0.status.0.load_balancer.0.ingress.0.hostname != ""
     ?
-    kubernetes_service.this-service.status.0.load_balancer.0.ingress.0.hostname
+    kubernetes_service.this-service.0.status.0.load_balancer.0.ingress.0.hostname
     :
-    kubernetes_service.this-service.status.0.load_balancer.0.ingress.0.ip
+    kubernetes_service.this-service.0.status.0.load_balancer.0.ingress.0.ip
     :
     ""
   )
-  cluster_ip = kubernetes_service.this-service.spec.0.cluster_ip
-  port       = kubernetes_service.this-service.spec.0.port.0.port
+  cluster_ip = try(kubernetes_service.this-service.0.spec.0.cluster_ip, "")
+  port       = try(kubernetes_service.this-service.0.spec.0.port.0.port, "")
   port_ext = (
     length(keys(var.ports)) > 1 ?
-    kubernetes_service.this-service.spec.0.port.1.port :
+    kubernetes_service.this-service.0.spec.0.port.1.port :
     ""
   )
 }

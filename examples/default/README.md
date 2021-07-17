@@ -29,7 +29,7 @@ locals {
 }
 
 module "deployment_example" {
-  source            = "../../"
+  source            = "srb3/simple-deployment/kubernetes"
   namespace         = kubernetes_namespace.example.metadata[0].name
   service_name      = "postgres-master"
   image             = "postgres:latest"

@@ -1,17 +1,10 @@
-# Kubernetes provider used to generate
-# a namespace for our kuma deployment
-provider "kubernetes" {
-  config_path = var.kube_config_file
-}
+# Example Postgres Deployment
 
-resource "kubernetes_namespace" "example" {
-  metadata {
-    name = "deployment-example"
-  }
-}
+The following example will create one deployment of
+postgres with no associated service.
 
+```HCL
 locals {
-  ns = kubernetes_namespace.example.metadata[0].name
   postgres_env = {
     "POSTGRES_USER"     = "example"
     "POSTGRES_PASSWORD" = "example"
@@ -32,21 +25,22 @@ locals {
     cpu    = "100m"
     memory = "128Mi"
   }
-  postgres_labels = {
-    "test1" = "alpha"
-    "test2" = "beta"
-  }
 }
 
 module "deployment_example" {
-  source            = "../../"
-  namespace         = local.ns
-  name              = "postgres-master"
+  source            = "srb3/simple-deployment/kubernetes"
+  namespace         = kubernetes_namespace.example.metadata[0].name
+  service_name      = "postgres-master"
   image             = "postgres:latest"
   env               = local.postgres_env
   ports             = local.postgres_ports
   resource_limits   = local.postgres_limits
   resource_requests = local.postgres_requests
-  extra_labels      = local.postgres_labels
+  create_service    = false
   replicas          = 1
 }
+```
+
+## Testing
+
+Tests are run via the makefile
