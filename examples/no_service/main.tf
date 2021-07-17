@@ -6,7 +6,7 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "example" {
   metadata {
-    name = "deployment-example"
+    name = "deployment-example-no-service"
   }
 }
 
@@ -48,5 +48,6 @@ module "deployment_example" {
   resource_limits   = local.postgres_limits
   resource_requests = local.postgres_requests
   extra_labels      = local.postgres_labels
+  create_service    = false
   replicas          = 1
 }

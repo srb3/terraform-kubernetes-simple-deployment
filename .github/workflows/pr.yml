@@ -31,12 +31,12 @@ jobs:
           sudo dpkg -i /tmp/cinc-auditor.deb
       - name: Build
         run: |
-          make build_default
+          make all_build
           while [[ $(kubectl get pods -n deployment-example -l app=postgres-master -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]
           do
             echo "waiting for pod" && sleep 1
           done
       - name: TF Destroy
         run: |
-          make clean_default || true
+          make all_clean || true
         if: ${{ always() }}

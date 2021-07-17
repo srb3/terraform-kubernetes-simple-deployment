@@ -3,7 +3,7 @@ variable "namespace" {
   type        = string
 }
 
-variable "service_name" {
+variable "name" {
   description = "The name of the service to create to expose this deployment"
   type        = string
 }
@@ -131,4 +131,10 @@ variable "resource_limits" {
     memory = string
   })
   default = null
+}
+
+variable "create_service" {
+  description = "Should a service be created for this deployment"
+  type        = bool
+  default     = true
 }
