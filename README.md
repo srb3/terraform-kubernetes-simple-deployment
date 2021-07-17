@@ -10,7 +10,8 @@ facilitate quick deployment of demo and POC environments
 ### Example deploying postgresql
 
 The following example will create one deployment of
-postgres, and one service exposing that deployment.
+postgres, and one service exposing that deployment. It
+also sets a few optional mondule inputs.
 
 ```HCL
 locals {
