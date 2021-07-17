@@ -23,14 +23,6 @@ jobs:
           minikube version: 'v1.18.1'
           kubernetes version: 'v1.20.2'
           github token: ${{ secrets.GITHUB_TOKEN }}
-      - name: install ingress
-        run: |
-          minikube addons enable ingress
-          kubectl patch configmap -n kube-system nginx-load-balancer-conf --patch '{"data":{"proxy-buffer-size":"16k"}}'
-      - name: install metallb
-        run: |
-          minikube addons enable metallb
-          kubectl apply -f test/fixtures/minikube/cm.yaml
       - name: wait
         run: while [[ $(kubectl -n kube-system get pods -l k8s-app=kube-dns -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}') != "True" ]]; do echo "waiting for pod" && sleep 1; done
       - name: Install deps
