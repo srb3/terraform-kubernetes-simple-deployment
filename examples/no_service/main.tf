@@ -33,6 +33,7 @@ locals {
     memory = "128Mi"
   }
   postgres_labels = {
+    "app"   = "postgres-master"
     "test1" = "alpha"
     "test2" = "beta"
   }
@@ -47,7 +48,7 @@ module "deployment_example" {
   ports             = local.postgres_ports
   resource_limits   = local.postgres_limits
   resource_requests = local.postgres_requests
-  extra_labels      = local.postgres_labels
+  deployment_labels = local.postgres_labels
   create_service    = false
   replicas          = 1
 }
