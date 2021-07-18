@@ -1,6 +1,7 @@
 # Labels
 locals {
-  labels = merge(var.extra_labels, { app = var.name })
+  labels                  = merge(var.extra_labels, { app = var.name })
+  service_selector_labels = length(var.service_selector_labels) > 0 ? var.service_selector_labels : local.labels
 }
 
 # Create any config maps
@@ -17,7 +18,7 @@ resource "kubernetes_config_map" "this-config-map" {
 resource "kubernetes_service" "this-service" {
   count = var.create_service ? 1 : 0
   metadata {
-    name        = var.name
+    name        = var.service_name != "" ? var.service_name : var.name
     namespace   = var.namespace
     annotations = var.service_annotations
   }
@@ -32,7 +33,7 @@ resource "kubernetes_service" "this-service" {
         target_port = port.value.container_port
       }
     }
-    selector = local.labels
+    selector = local.service_selector_labels
   }
 }
 
@@ -81,7 +82,7 @@ resource "kubernetes_deployment" "this-deployment" {
             limits   = var.resource_limits
           }
           image = var.image
-          name  = var.name
+          name  = var.image_name != "" ? var.image_name : var.name
 
           dynamic "env" {
             for_each = var.env
@@ -91,7 +92,7 @@ resource "kubernetes_deployment" "this-deployment" {
             }
           }
 
-          args = var.args
+          args = var.image_args
 
           dynamic "volume_mount" {
             for_each = toset(var.config_map_volumes)

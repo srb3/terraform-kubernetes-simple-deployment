@@ -13,6 +13,18 @@ variable "image" {
   type        = string
 }
 
+variable "image_name" {
+  description = "The name you want to give the image, if you want it to be different to the value specified in the name variable"
+  type        = string
+  default     = ""
+}
+
+variable "image_args" {
+  description = "arguments that you want to pass to the container"
+  type        = list(string)
+  default     = []
+}
+
 variable "replicas" {
   description = "The number of replias for this deployment"
   type        = number
@@ -27,6 +39,18 @@ variable "service_type" {
 
 variable "service_annotations" {
   description = "A map of annotations for the service that exposes this deployment"
+  type        = map(string)
+  default     = {}
+}
+
+variable "service_name" {
+  description = "The name of the service, if you want it to be different to the value specified in the name variable"
+  type        = string
+  default     = ""
+}
+
+variable "service_selector_labels" {
+  description = "A map of labels for the service to select on, if you want the value to be different to the name variable and extra lables"
   type        = map(string)
   default     = {}
 }
@@ -51,12 +75,6 @@ variable "ports" {
     port           = number
   }))
   default = {}
-}
-
-variable "args" {
-  description = "Arguments to the entrypoint"
-  type        = list(string)
-  default     = []
 }
 
 variable "readiness_probe" {
