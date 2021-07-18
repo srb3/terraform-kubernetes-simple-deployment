@@ -55,8 +55,8 @@ variable "service_selector_labels" {
   default     = {}
 }
 
-variable "extra_labels" {
-  description = "Any extra labels you want to add to the deployment"
+variable "deployment_labels" {
+  description = "Any labels you want to add to the deployment, if none are set then the value of the name variable is added to label key of app"
   type        = map(string)
   default     = {}
 }

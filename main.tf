@@ -1,6 +1,6 @@
 # Labels
 locals {
-  labels                  = merge(var.extra_labels, { app = var.name })
+  labels                  = length(var.deployment_labels) > 0 ? var.deployment_labels : { app = var.name }
   service_selector_labels = length(var.service_selector_labels) > 0 ? var.service_selector_labels : local.labels
 }
 

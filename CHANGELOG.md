@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.0.6
+
+💥 Breaking changes:
+
+- Replaced extra_labels variable with deployment_labels, value of deployment labels
+  is no longer merged with the deployment name and the app key
+
+  ([PR #6](https://github.com/srb3/terraform-kubernetes-simple-deployment/pull/6))
+
 ## 0.0.5
 
 🆕 New features:
@@ -7,7 +16,6 @@
 - Added service_name, image_args, service_selector_labels and image_name options
 
   ([PR #5](https://github.com/srb3/terraform-kubernetes-simple-deployment/pull/5))
-
 
 ## 0.0.4
 
