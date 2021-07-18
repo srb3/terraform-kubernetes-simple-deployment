@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.0.5
+
+🆕 New features:
+
+- Added service_name, image_args, service_selector_labels and image_name options
+
+  ([PR #5](https://github.com/srb3/terraform-kubernetes-simple-deployment/pull/5))
+
+
 ## 0.0.4
 
 🆕 New features:
