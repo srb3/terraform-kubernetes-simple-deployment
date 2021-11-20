@@ -37,6 +37,13 @@ locals {
     "test1" = "alpha"
     "test2" = "beta"
   }
+  empty_dir_volumes = [
+    {
+      name       = "pg-storage"
+      mount_path = "/tmp/pg_tmp"
+      read_only  = false
+    }
+  ]
 }
 
 module "deployment_example" {
@@ -49,5 +56,6 @@ module "deployment_example" {
   resource_limits   = local.postgres_limits
   resource_requests = local.postgres_requests
   deployment_labels = local.postgres_labels
+  empty_dir_volumes = local.empty_dir_volumes
   replicas          = 1
 }

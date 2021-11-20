@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.7
+
+🆕 New features:
+
+- Added the ability to attach empty volume mounts to deployments
+
+  ([PR #7](https://github.com/srb3/terraform-kubernetes-simple-deployment/pull/7))
+
 ## 0.0.6
 
 💥 Breaking changes:
