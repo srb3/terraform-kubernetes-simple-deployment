@@ -76,6 +76,16 @@ resource "kubernetes_deployment" "this-deployment" {
           }
         }
 
+        dynamic "volume" {
+          for_each = toset(var.empty_dir_volumes)
+          content {
+            name = volume.value.name
+            empty_dir {
+              medium = ""
+            }
+          }
+        }
+
         container {
           resources {
             requests = var.resource_requests
@@ -96,6 +106,15 @@ resource "kubernetes_deployment" "this-deployment" {
 
           dynamic "volume_mount" {
             for_each = toset(var.config_map_volumes)
+            content {
+              name       = volume_mount.value.name
+              read_only  = volume_mount.value.read_only
+              mount_path = volume_mount.value.mount_path
+            }
+          }
+
+          dynamic "volume_mount" {
+            for_each = toset(var.empty_dir_volumes)
             content {
               name       = volume_mount.value.name
               read_only  = volume_mount.value.read_only

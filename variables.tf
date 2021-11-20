@@ -127,6 +127,16 @@ variable "config_map_volumes" {
   default = []
 }
 
+variable "empty_dir_volumes" {
+  description = "List of config maps to be mounted as data volumes"
+  type = list(object({
+    name       = string
+    mount_path = string
+    read_only  = bool
+  }))
+  default = []
+}
+
 variable "config_map_data" {
   description = "map of config map data items"
   type        = map(string)
